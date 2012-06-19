@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2007-2012 Concurrent, Inc. All Rights Reserved.
+ *
+ * Project and contact information: http://www.concurrentinc.com/
+ */
+
+/*
+  Using:
+  To run a single test:
+    > gradle -Dtest.single=CoGroupFieldedPipesPlatformTest :apache-0.20.2:test -i
+
+  To remotely debug use
+    -Dtest.debug
+ */
+
+ext.cascadingVersion = '2.0.0'
+
+allprojects {
+
+  apply plugin: 'java'
+  apply plugin: 'idea'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
+    mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+  }
+
+  // core dependencies - see {platform}-settings.gradle for platform specific dependencies
+  dependencies {
+    runtime( group: 'cascading', name: 'cascading-core', version: cascadingVersion )
+    runtime( group: 'cascading', name: 'cascading-test', version: cascadingVersion ) { transitive = false }
+  }
+}
+
+subprojects {
+
+  task unarchiveTest {
+    outputs.dir "$buildDir/classes/test/"
+  }
+
+  unarchiveTest << {
+
+    def jar = zipTree( configurations.runtime.files {dep -> dep.name == 'cascading-test'}.toList()[ 0 ] )
+
+    inputs.file jar
+
+    mkdir "$buildDir/classes/test/"
+
+    copy {
+      from jar
+      into "$buildDir/classes/test/"
+    }
+  }
+
+  test {
+    dependsOn << unarchiveTest
+
+    forkEvery = 1
+    jvmArgs '-Xmx756m'
+
+    include '**/*PlatformTest.class'
+
+    systemProperties[ 'test.cluster.enabled' ] = 'true'
+    systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
+    systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
+  }
+}
+
+test.enabled = false; // disable root project tests

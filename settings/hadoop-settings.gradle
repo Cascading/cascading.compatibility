@@ -1,0 +1,18 @@
+/*
+ * Copyright (c) 2007-2012 Concurrent, Inc. All Rights Reserved.
+ *
+ * Project and contact information: http://www.concurrentinc.com/
+ */
+
+dependencies {
+  runtime( group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion ) { transitive = false }
+}
+
+test {
+  include '**/HadoopTest.class'
+
+  systemProperties[ 'test.platform.includes' ] = 'hadoop'
+
+  systemProperties[ 'hadoop.log.dir' ] = new String( "${buildDir}/test/log" )
+  systemProperties[ 'hadoop.tmp.dir' ] = new String( "${buildDir}/test/tmp" )
+}

@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2007-2012 Concurrent, Inc. All Rights Reserved.
+ *
+ * Project and contact information: http://www.concurrentinc.com/
+ */
+
+def hadoopVersion = '0.20.2'
+
+// get default hadoop configuration
+apply from: "${rootDir}/settings/hadoop-settings.gradle"
+
+dependencies {
+  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion )
+  runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
+    exclude group: 'ant'
+    exclude group: 'junit'
+  }
+
+  // missing deps
+  runtime group: 'commons-io', name: 'commons-io', version: '2.0.1'
+}
+
