@@ -37,6 +37,10 @@ allprojects {
     runtime( group: 'cascading', name: 'cascading-core', version: cascadingVersion )
     runtime( group: 'cascading', name: 'cascading-xml', version: cascadingVersion )
     runtime( group: 'cascading', name: 'cascading-test', version: cascadingVersion ) { transitive = false }
+    runtime( group: 'junit', name: 'junit', version: '4.8.+' )
+
+    // currently necessary for TrapPlatformTest, ConfigDefPlatformTest
+    runtime( group: 'cascading', name: 'cascading-local', version: cascadingVersion )
   }
 }
 

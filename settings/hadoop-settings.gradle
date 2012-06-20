@@ -23,7 +23,8 @@ dependencies {
 }
 
 test {
-  include '**/HadoopTest.class'
+  include '**/*HadoopTest.class'
+  exclude '**/Local*PlatformTest.class'
 
   systemProperties[ 'test.platform.includes' ] = 'hadoop'
 
