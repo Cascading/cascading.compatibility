@@ -35,6 +35,7 @@ allprojects {
   // core dependencies - see {platform}-settings.gradle for platform specific dependencies
   dependencies {
     runtime( group: 'cascading', name: 'cascading-core', version: cascadingVersion )
+    runtime( group: 'cascading', name: 'cascading-xml', version: cascadingVersion )
     runtime( group: 'cascading', name: 'cascading-test', version: cascadingVersion ) { transitive = false }
   }
 }
