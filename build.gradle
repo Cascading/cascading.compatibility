@@ -20,6 +20,10 @@
 
 ext.cascadingVersion = '2.0.2'
 
+// uncomment if testing a local build of Cascading via
+// > cd $CASCADING_HOME; gradle clean install
+//cascadingVersion = "${cascadingVersion}-wip-dev"
+
 allprojects {
 
   apply plugin: 'java'
