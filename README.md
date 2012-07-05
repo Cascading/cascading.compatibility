@@ -1,9 +1,12 @@
 # Cascading Compatibility Test Suite
 
-This project will test the binary compatibility of Cascading with differing releases of an
-underlying platform.
+This project will test the binary compatibility of Cascading with differing releases of an underlying platform.
 
-The only currently supported platform is Apache Hadoop.
+Cascading 2.0 is current built and published against Apache Hadoop 1.0.x. So is fully tested with that Apache release.
+
+This suite allows other distributions to be verified as being compatible with the current Cascading release as available
+through Maven and through other tools apart of the [Cascading ecosystem](http://www.cascading.org/extensions/).
+
 
 ## Detail
 
