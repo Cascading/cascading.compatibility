@@ -23,7 +23,7 @@ Any non-Apache Haddoop distribution may fork this project and add a sub-project 
 
 ## Running Compatibility Tests
 
-To execute all tests across all platforms
+To execute all tests across all platforms, install Gradle 1.0 and execute:
 
 ```bash
   > gradle test
