@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '2.0.2'
+ext.cascadingVersion = '2.0.3'
 
 // uncomment if testing a local build of Cascading via
 // > cd $CASCADING_HOME; gradle clean install
@@ -33,7 +33,6 @@ allprojects {
     mavenLocal()
     mavenCentral()
     mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
-    mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
   }
 
   // core dependencies - see {platform}-settings.gradle for platform specific dependencies

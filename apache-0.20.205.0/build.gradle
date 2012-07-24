@@ -23,6 +23,10 @@ def hadoopVersion = '0.20.205.0'
 // get default hadoop configuration
 apply from: "${rootDir}/settings/hadoop-settings.gradle"
 
+repositories {
+  mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+}
+
 dependencies {
   runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion )
   runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
