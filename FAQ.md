@@ -69,3 +69,19 @@ If the Cascading compatibility tests do pass on a custom Hadoop build, then its 
 the tools distributed in the SDK will also run without errors.
 
 The compatibility test is included in the SDK as a convenience.
+
+## What do you mean by 'Apache Hadoop', how is that different from the Hadoop I use?
+
+The Apache foundation is the home and legal copyright holder for the Hadoop project. Both the source code and binary
+releases are hosted on the Apache Hadoop project page.
+
+Per the Apache License, any organization can compile and redistribute Hadoop for nearly any purpose, without
+any significant limitations (see a lawyer for details).
+
+The Hadoop release downloaded from the Apache Hadoop project page is the Apache Hadoop distribution. No other
+organization providing a release is entitled to call their Hadoop download Apache, per the rules of the
+Apache foundation.
+
+Cascading is compiled, tested, and distributed for the latest stable version of Apache Hadoop. Pre-built binaries of
+Cascading will not run on any other distribution unless the Hadoop distribution in question is source and binary
+compatible with the Apache Hadoop release.
