@@ -18,6 +18,23 @@
  * limitations under the License.
  */
 
-include 'apache-0.20.2'
-include 'apache-0.20.205.0'
-include 'apache-1.0.3'
+def hadoopVersion = '1.0.3'
+
+// get default hadoop configuration
+apply from: "${rootDir}/settings/hadoop-settings.gradle"
+
+repositories {
+  mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+}
+
+dependencies {
+  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion )
+  runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
+    exclude group: 'ant'
+    exclude group: 'junit'
+  }
+
+  // missing deps
+  runtime group: 'commons-io', name: 'commons-io', version: '2.1'
+  runtime group: 'javax.ws.rs', name: 'jsr311-api', version: '1.1.1'
+}
