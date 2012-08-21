@@ -20,13 +20,11 @@
 
 dependencies {
   runtime( group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion ) { transitive = false }
+  runtime( group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion, classifier: 'tests' ) { transitive = false }
 }
 
 test {
   include '**/*HadoopTest.class'
-  exclude '**/Local*PlatformTest.class'
-
-  systemProperties[ 'test.platform.includes' ] = 'hadoop'
 
   systemProperties[ 'hadoop.log.dir' ] = new String( "${buildDir}/test/log" )
   systemProperties[ 'hadoop.tmp.dir' ] = new String( "${buildDir}/test/tmp" )
