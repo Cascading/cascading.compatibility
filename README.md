@@ -7,6 +7,8 @@ Cascading 2.1 is currently built and published against Apache Hadoop 1.0.x. So i
 This suite allows other distributions to be verified as being compatible with the current Cascading release as available
 through Maven and through other tools apart of the [Cascading ecosystem](http://www.cascading.org/extensions/).
 
+To see the current results, visit the [Cascading Compatibility](http://cascading.org/support/compatibility/) page.
+
 See the FAQ, included in this project, for more information.
 
 ## Detail
