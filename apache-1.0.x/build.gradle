@@ -30,7 +30,9 @@ repositories {
 }
 
 dependencies {
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion )
+  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
+    exclude group: 'oro'
+  }
   runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
     exclude group: 'ant'
     exclude group: 'junit'
