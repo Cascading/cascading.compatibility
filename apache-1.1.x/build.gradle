@@ -40,8 +40,5 @@ dependencies {
   }
 
   // missing deps
-  //runtime group: 'commons-io', name: 'commons-io', version: '2.1'
-  //runtime group: 'javax.ws.rs', name: 'jsr311-api', version: '1.1.1'
   runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
-  //runtime group: 'log4j', name: 'log4j', version: '1.2.16'
 }
