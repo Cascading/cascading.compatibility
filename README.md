@@ -2,7 +2,7 @@
 
 This project will test the binary compatibility of Cascading with differing releases of an underlying platform.
 
-Cascading 2.1 is currently built and published against Apache Hadoop 1.0.x. So is fully tested with that Apache release.
+Cascading 2.2 is currently built and published against Apache Hadoop 1.1.x. So is fully tested with that Apache release.
 
 This suite allows other distributions to be verified as being compatible with the current Cascading release as available
 through Maven and through other tools apart of the [Cascading ecosystem](http://www.cascading.org/extensions/).
@@ -38,11 +38,42 @@ To add a sub-project, copy one of the current Apache sub-projects to a new direc
 distribution. For example,
 
 ```bash
-  > cp -R apache-0.20.2 vendor-1.0
+  > cp -R apache-1.1.x vendor-1.0
 ```
 
-Update the `setting.gradle` to include the new directory.
+Update the `distribution.properties` file with all information about your
+distribution. Please make sure to fill in all fields, if something does not
+apply to your distribution, leave it empty. The meaning of each property is
+explained below:
 
+```
+    # the internal name of the distribution, used as the key
+    distribution.name=vendor
+
+    # the version of the distribution you are testing
+    distribution.version=1.0.0
+
+    # the name used for displaying on http://cascading.org/compatibility
+    distribution.displayname=HadoopVendor
+
+    # the homepage of your distribution
+    distribution.url=http://vendor.example.com
+
+    # dowload link of your distribution
+    distribution.downloadurl=http://vendor.example.com/1.0/download
+
+    # release notes of the version at hand
+    distribution.releaseurl=http://vendor.example.com/1.0/releasenotes.html
+
+    # maven repository of the distribution
+    distribution.mavenrepo=http://maven.example.com/repository
+
+    # does the distribution ship with the cascading SDK?
+    distribution.includessdk=yes
+```
+
+
+Afterwards add your distribution to the `settings.gradle` to include the new directory
 ```bash
   > echo "include 'vendor-1.0'" >> settings.gradle
 ```
@@ -66,6 +97,26 @@ When updated, to run the tests, call:
 ```
 
 Note that `-i` allows you to see the tests running and is quite useful when calling just the `test` target.
+
+## Sending cascading compatibility results
+
+The build contains a task to send test results back to the cascading project. If
+you want to send the results of your distribution upstream use the
+`uploadResults` tasks like this:
+
+```bash
+  > gradle :vendor-1.0:test uploadResults -i
+```
+
+If you have multiple versions of your distribution and you want to upload
+results for all of them (which you should), add them to the same gradle run:
+
+```bash
+  > gradle :vendor-1.0:test :vendor-2.0:test :vendor-42:test  uploadResults -i
+```
+
+Please note, that the build will fail on test failures, if the `uploadResults`
+task is enabled. This is intentional to prevent reporting failed tests.
 
 ## Creating an IntelliJ module file
 

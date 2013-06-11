@@ -36,7 +36,9 @@ README file.
 
 ## How do I have my Hadoop distribution listed on the compatibility page?
 
-Send an email to support@cascading.org.
+Execute the `publishResults` task after your tests, as explained in the README
+file.
+
 
 ## Is a Maven repository required?
 
@@ -85,3 +87,18 @@ Apache foundation.
 Cascading is compiled, tested, and distributed for the latest stable version of Apache Hadoop. Pre-built binaries of
 Cascading will not run on any other distribution unless the Hadoop distribution in question is source and binary
 compatible with the Apache Hadoop release.
+
+## Many tests are failing with problems in MiniDFSCluster. What can I do?
+
+This is a permission problem and can be solved by setting the umask in your
+current sesssion ot `0022` like so:
+
+```bash
+    > umask 0022
+```
+
+Afterwards you will be able to run the tests as described in the README file:
+
+```bash
+    > gradle :vendor-1.0:tests uploadResults -i
+```

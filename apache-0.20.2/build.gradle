@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+
+
 def hadoopVersion = '0.20.2'
 
 // get default hadoop configuration

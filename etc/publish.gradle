@@ -1,0 +1,132 @@
+/*
+ * Copyright (c) 2007-2013 Concurrent, Inc. All Rights Reserved.
+ *
+ * Project and contact information: http://www.cascading.org/
+ *
+ * This file is part of the Cascading project.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'java'
+
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
+  }
+  dependencies {
+    classpath "com.amazonaws:aws-java-sdk:1.4.5"
+  }
+}
+
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.GroupGrantee;
+import com.amazonaws.services.s3.model.Permission;
+import com.amazonaws.services.s3.model.PutObjectRequest
+
+ext.s3bucketName = "compatibility.cascading.org"
+
+task gatherTestResultTarballs() {
+  description = "collects all test result tarballs and and makes their names unique"
+  doLast {
+    for( subproject in subprojects )
+    {
+      def tree = fileTree( subproject.buildDir ) {
+        include '*.tgz'
+      }
+      for( tarball in tree )
+      {
+        copy {
+          from tarball
+          into buildDir
+          rename '(.+)', actualCascadingRelease + '-$1'
+        }
+      }
+    }
+  }
+}
+
+task gatherTestResults() << {
+  description = "collects all test results and prepares them for publishing"
+
+  def distributions = [:]
+  for( sub in subprojects )
+  {
+    for( f in sub.buildDir.listFiles() )
+    {
+      if( f.name.endsWith( resultFileName ) )
+      {
+        def json = null
+        file( f ).withReader { reader ->
+          json = new JsonSlurper().parse( reader )
+        }
+
+        def distributionName = json[ 'distributionName' ]
+        def distributionVersion = json[ 'distributionVersion' ]
+
+        if( distributions.get( distributionName ) != null )
+        {
+          distributions[ distributionName ][ distributionVersion ] = json
+        }
+        else
+        {
+          distributions[ distributionName ] = ["${distributionVersion}": json]
+        }
+
+      }
+    }
+  }
+
+  file( "${buildDir}" ).mkdirs()
+  distributions.each { name, results ->
+    def map = [:]
+    map[ "cascadingVersion" ] = actualCascadingVersion
+    map[ "result" ] = results
+    def bldr = new JsonBuilder( map )
+    file( "${buildDir}/${actualCascadingRelease}-${name}.json" ).write( bldr.toString() )
+  }
+
+}
+
+task uploadResults( dependsOn: [gatherTestResults, gatherTestResultTarballs] ) {
+  description = "publishes compatibility test results"
+
+  def prefix = "partner/"
+  doLast {
+    def tree = fileTree( buildDir ) {
+      include '**/*.json'
+      include '**/*.tgz'
+    }
+    def s3 = new AmazonS3Client()
+    def acl = new AccessControlList()
+    acl.grantPermission( GroupGrantee.AuthenticatedUsers,
+            Permission.Read )
+    acl.grantPermission( GroupGrantee.AuthenticatedUsers,
+            Permission.Write )
+
+    for( resultFile in tree )
+    {
+      key = "${prefix}${resultFile.name}"
+      logger.info( "uploading ${resultFile.name} to s3://${s3bucketName}/${key}" )
+      def s3PutReq = new PutObjectRequest( s3bucketName,
+              key,
+              resultFile ).withAccessControlList( acl )
+      s3.putObject( s3PutReq )
+    }
+  }
+}

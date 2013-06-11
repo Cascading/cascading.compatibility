@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2012 Concurrent, Inc. All Rights Reserved.
+ * Copyright (c) 2007-2013 Concurrent, Inc. All Rights Reserved.
  *
  * Project and contact information: http://www.cascading.org/
  *
@@ -18,11 +18,22 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '2.2.+'
+ext.cascadingVersion = '2.2.0-+'
+
+apply from: 'etc/publish.gradle'
 
 // uncomment if testing a local build of Cascading via
 // > cd $CASCADING_HOME; gradle clean install
 //cascadingVersion = "${cascadingVersion}-wip-dev"
+
+import groovy.json.JsonBuilder
+import java.text.SimpleDateFormat
+import org.apache.tools.ant.filters.ReplaceTokens
+
+// use human readable date format
+ext.testDate = new SimpleDateFormat( "MMMM dd, yyyy" ).format( new Date() )
+
+ext.resultFileName = "result.json"
 
 allprojects {
 
@@ -40,7 +51,7 @@ allprojects {
     runtime( group: 'cascading', name: 'cascading-core', version: cascadingVersion, classifier: 'tests' )
     runtime( group: 'cascading', name: 'cascading-platform', version: cascadingVersion, classifier: 'tests' )
 
-    testCompile group: 'junit', name: 'junit', version: '4.8.+'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
   }
 }
 
@@ -78,13 +89,56 @@ subprojects {
     }
   }
 
+  // make properties available to sub-project
+  ext.distProps = new Properties()
+
+  if( file( "distribution.properties" ).exists() )
+  {
+    file( "distribution.properties" ).withReader { reader ->
+      distProps.load( reader )
+    }
+  }
+
+  task createResultFile( dependsOn: test ) {
+    description = "creates a result.json file for the test run"
+
+    if( file( "distribution.properties" ).exists() )
+    {
+      doLast {
+        file( buildDir ).mkdirs()
+        def result = [
+                distributionName: distProps[ "distribution.name" ],
+                distributionVersion: distProps[ "distribution.version" ],
+                distributionDisplayName: distProps[ "distribution.displayname" ],
+                distributionURL: distProps[ "distribution.url" ],
+                distributionDownloadURL: distProps[ "distribution.downloadurl" ],
+                distributionReleaseURL: distProps[ "distribution.releaseurl" ],
+                distributionMavenRepo: distProps[ "distribution.mavenrepo" ],
+                includesSDK: distProps[ "distribution.includessdk" ],
+
+                // TODO make these dynamic
+                isBinaryCompatible: "yes",
+                isSourceCompatible: "yes",
+
+                testDate: "${rootProject.testDate}",
+
+                cascadingVersion: actualCascadingVersion
+        ]
+
+        def bldr = new JsonBuilder( result )
+        file( "${buildDir}/${resultFileName}" ).write( bldr.toString() )
+      }
+    }
+  }
+
   test {
     dependsOn << unarchiveTest
+    dependsOn << cleanTest
 
     forkEvery = 1
     jvmArgs '-Xmx756m'
 
-    ignoreFailures = true
+    ignoreFailures = !rootProject.tasks[ "uploadResults" ].enabled
 
     include '**/*PlatformTest.class'
 
@@ -92,6 +146,56 @@ subprojects {
     systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
     systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
   }
+
+
+  task tarTestResults( type: Tar, dependsOn: [createResultFile, test] ) {
+    // can't read the result.json file, since it does not exist yet in the
+    // config phase of the task.
+    def distProps = null
+    file( "${projectDir}/distribution.properties" ).withReader { reader ->
+      distProps = new Properties()
+      distProps.load( reader )
+    }
+    def distName = distProps[ "distribution.name" ]
+    def distVersion = distProps[ "distribution.version" ]
+
+    assert distName
+    assert distVersion
+
+    compression = Compression.GZIP
+    from( testReportDir )
+    destinationDir = buildDir
+    archiveName = "${distName}-${distVersion}-test-results.tgz"
+  }
+}
+
+ext.actualCascadingVersion = null
+ext.actualCascadingRelease = null
+
+project.afterEvaluate {
+  // this interesting construct is responsible for fetching the actual version of
+  // cascading that the build will use. What this means is, that it will set a
+  // property on the project that contains the 2.1.6 and not the 2.1.+
+  // version. We want to have this in order to have proper reporting about
+  // compatibility.
+  // Please note, that this property is not usable in the configuration phase
+  // of other tasks, since it is only set after those have been configured.
+
+  // if there is an easier way to do this, please send us a patch.
+  def resolvedDependency = project.configurations.runtime.resolvedConfiguration.resolvedArtifacts.findAll { artifact ->
+    artifact.name.contains( "cascading-core" ) }.asList()[ 0 ]
+
+  def version = resolvedDependency.moduleVersion.id.version
+  project.ext.actualCascadingVersion = version
+  def versionParts = version.toString().split( "\\." ).toList()
+  project.ext.actualCascadingRelease = versionParts[ 0 ] + "." + versionParts[ 1 ]
 }
 
 test.enabled = false; // disable root project tests
+
+// this goes at the very bottom an wires the result creation togehter. gradle
+// reads files top to bottom  and starts failing, if we put this anywhere
+// else.
+gatherTestResults.dependsOn( subprojects.createResultFile )
+
+gatherTestResultTarballs.dependsOn( subprojects.tarTestResults )

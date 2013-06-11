@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-def hadoopVersion = '1.0.4'
+def hadoopVersion = distProps[ "distribution.version" ]
 
 // get default hadoop configuration
 apply from: "${rootDir}/settings/hadoop-settings.gradle"
@@ -37,9 +37,9 @@ dependencies {
     exclude group: 'oro'
   }
 
-  // missing deps
+  // missing deps - pinned to versions used in the distribution
   runtime group: 'commons-io', name: 'commons-io', version: '2.1'
   runtime group: 'javax.ws.rs', name: 'jsr311-api', version: '1.1.1'
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
-  runtime group: 'log4j', name: 'log4j', version: '1.2.16'
+  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.4.3'
+  runtime group: 'log4j', name: 'log4j', version: '1.2.15'
 }
