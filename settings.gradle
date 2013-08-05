@@ -21,3 +21,4 @@
 include 'apache-0.20.205.0'
 include 'apache-1.0.x'
 include 'apache-1.1.x'
+include 'apache-1.2.x'
