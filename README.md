@@ -38,7 +38,7 @@ To add a sub-project, copy one of the current Apache sub-projects to a new direc
 distribution. For example,
 
 ```bash
-  > cp -R apache-1.1.x vendor-1.0
+  > cp -R example-1.0 vendor-1.0
 ```
 
 Update the `distribution.properties` file with all information about your

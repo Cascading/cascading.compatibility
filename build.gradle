@@ -41,7 +41,6 @@ allprojects {
   apply plugin: 'idea'
 
   repositories {
-    mavenLocal()
     mavenCentral()
     mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
   }
