@@ -92,7 +92,7 @@ subprojects {
   ext.distProps = new Properties()
 
   if( file( "distribution.properties" ).exists() )
-  {
+    {
     file( "distribution.properties" ).withReader { reader ->
       distProps.load( reader )
     }
@@ -119,6 +119,13 @@ subprojects {
                 isBinaryCompatible: "yes",
                 isSourceCompatible: "yes",
 
+                // this assumes that the gradle jvm vendor and version are
+                // the same that is used to run the tests. If that is not the
+                // case in your build, you have to modify this line.
+                jvmVersion: System.properties[ "java.version" ],
+
+                // use java.vm.vendor, not java.vendor to see if it is OpenJDK
+                jvmName: System.properties[ "java.vm.vendor" ],
                 testDate: "${rootProject.testDate}",
 
                 cascadingVersion: actualCascadingVersion
