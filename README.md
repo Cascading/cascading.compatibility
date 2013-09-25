@@ -89,6 +89,8 @@ When updated, to run the tests, call:
   > gradle :vendor-1.0:test -i
 ```
 
+If your distribution is not deployed to a maven repository, please see the FAQ
+on how to run the tests without one.
 
 ## Running a single test
 

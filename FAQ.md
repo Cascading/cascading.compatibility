@@ -47,11 +47,28 @@ No.
 This is the simplest way to have Gradle find your Hadoop build. But you can update the test CLASSPATH to
 include jars from a local directory, or download a tar/zip file and unpack it into the CLASSPATH.
 
-See the Gradle documentation for more details.
+Suppose you want to run the tests against the jars of an apache hadoop release
+tarball, which has been unpacked in `/home/hadoop`, then your `build.gradle`
+file should look something like this:
+
+```
+def hadoopVersion = distProps[ "distribution.version" ]
+
+// get default hadoop configuration
+apply from: "${rootDir}/settings/hadoop-settings.gradle"
+
+dependencies {
+      runtime fileTree(dir: "/home/hadoop", include: "*.jar")
+      runtime fileTree(dir: "/home/hadoop/lib", include: "*.jar").exclude("*junit*")
+}
+```
+It is important to exclude the `junit` jar file, that ships with hadoop,
+otherwise the tests will fail.
 
 ## What Hadoop tests does this test execute?
 
-None.
+None, yet it relies on the `hadoop-test` jar to be present on the CLASSPATH to
+properly function.
 
 The point of this test is to run Cascading tests on top of the new Hadoop build in question. Not to run the
 new Hadoop build in question tests.
@@ -102,3 +119,5 @@ Afterwards you will be able to run the tests as described in the README file:
 ```bash
     > gradle :vendor-1.0:tests uploadResults -i
 ```
+
+
