@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '2.2.0-+'
+ext.cascadingVersion = '2.2.0'
 
 apply from: 'etc/publish.gradle'
 
@@ -27,7 +27,9 @@ apply from: 'etc/publish.gradle'
 //cascadingVersion = "${cascadingVersion}-wip-dev"
 
 import groovy.json.JsonBuilder
+
 import java.text.SimpleDateFormat
+
 import org.apache.tools.ant.filters.ReplaceTokens
 
 // use human readable date format
