@@ -45,3 +45,12 @@ dependencies {
   // missing deps
   runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
 }
+
+// If your tests have to run on remote cluster, comment this in and edit
+// the jobtracker and hdfs master configs accordingly.
+
+//test {
+//    systemProperties[ 'mapred.jar' ] = buildHadoopJar.archivePath
+//    systemProperties[ 'fs.default.name' ] = new String( 'hdfs://master.local:9000' )
+//    systemProperties[ 'mapred.job.tracker' ] = new String( 'master.local:9001' )
+//}

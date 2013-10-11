@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '2.2.0-+'
+ext.cascadingVersion = '2.2.1-+'
 
 apply from: 'etc/publish.gradle'
 
@@ -41,6 +41,7 @@ allprojects {
   apply plugin: 'idea'
 
   repositories {
+    //mavenLocal()
     mavenCentral()
     mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
   }
@@ -58,6 +59,16 @@ subprojects {
 
   task unarchiveTest {
     outputs.dir "$buildDir/classes/test/"
+  }
+
+  task buildHadoopJar(type: Jar) {
+    archiveName = "${rootProject.name}-${cascadingVersion}-remote-test.jar"
+    doFirst {
+      into( 'lib' ) {
+        from configurations.runtime
+        from configurations.testCompile
+      }
+    }
   }
 
   unarchiveTest << {
@@ -152,7 +163,6 @@ subprojects {
     systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
     systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
   }
-
 
   task tarTestResults( type: Tar, dependsOn: [createResultFile, test] ) {
     // can't read the result.json file, since it does not exist yet in the

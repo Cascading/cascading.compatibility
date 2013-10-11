@@ -92,6 +92,9 @@ When updated, to run the tests, call:
 If your distribution is not deployed to a maven repository, please see the FAQ
 on how to run the tests without one.
 
+If the tests have to run on a remote cluster, change the test settings at the
+bottom of your `build.gradle` file.
+
 ## Running a single test
 
 ```bash
