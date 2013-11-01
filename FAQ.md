@@ -36,9 +36,7 @@ README file.
 
 ## How do I have my Hadoop distribution listed on the compatibility page?
 
-Execute the `publishResults` task after your tests, as explained in the README
-file.
-
+Execute the `uploadResults` task after your tests, as explained in the README file.
 
 ## Is a Maven repository required?
 
@@ -108,7 +106,7 @@ compatible with the Apache Hadoop release.
 ## Many tests are failing with problems in MiniDFSCluster. What can I do?
 
 This is a permission problem and can be solved by setting the umask in your
-current sesssion ot `0022` like so:
+current sesssion to `0022` like so:
 
 ```bash
     > umask 0022
@@ -119,5 +117,3 @@ Afterwards you will be able to run the tests as described in the README file:
 ```bash
     > gradle :vendor-1.0:tests uploadResults -i
 ```
-
-

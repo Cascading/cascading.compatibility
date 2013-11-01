@@ -32,19 +32,19 @@ To execute all tests across all platforms, install Gradle 1.0 and execute:
 
 ## Testing a different distribution
 
-Any non-Apache Haddoop distribution may fork this project and add a sub-project specific to the vendor distribution.
+Any non-Apache Haddoop distribution may fork this project and add a sub-project specific to the vendor distribution. You
+may want to send the test results to the Cascading project, so that your distribution will be listed on the
+[Compatibility page](http://cascading.org/support/compatibility).
 
-To add a sub-project, copy one of the current Apache sub-projects to a new directory named after the new
-distribution. For example,
+To add a sub-project, copy the example project to a new directory named after the new distribution. For example,
 
 ```bash
   > cp -R example-1.0 vendor-1.0
 ```
 
-Update the `distribution.properties` file with all information about your
-distribution. Please make sure to fill in all fields, if something does not
-apply to your distribution, leave it empty. The meaning of each property is
-explained below:
+Update the `distribution.properties` file with all information about your distribution. Please make sure to fill in all
+fields, if something does not apply to your distribution, leave it empty. The meaning of each property is explained
+below:
 
 ```
     # the internal name of the distribution, used as the key
@@ -53,7 +53,7 @@ explained below:
     # the version of the distribution you are testing
     distribution.version=1.0.0
 
-    # the name used for displaying on http://cascading.org/compatibility
+    # the name used for displaying on http://cascading.org/support/compatibility
     distribution.displayname=HadoopVendor
 
     # the homepage of your distribution
@@ -89,11 +89,31 @@ When updated, to run the tests, call:
   > gradle :vendor-1.0:test -i
 ```
 
-If your distribution is not deployed to a maven repository, please see the FAQ
-on how to run the tests without one.
+If your distribution is not deployed to a maven repository, please see the FAQ on how to run the tests without one.
 
-If the tests have to run on a remote cluster, change the test settings at the
-bottom of your `build.gradle` file.
+If the tests have to run on a remote cluster, change the test settings at the bottom of your `build.gradle` file.
+
+## Sending cascading compatibility results
+
+The build contains a task to send test results back to the cascading project. If you want to send the results of your
+distribution upstream use the `uploadResults` tasks like this:
+
+```bash
+  > gradle :vendor-1.0:test uploadResults -i
+```
+
+If you have multiple versions of your distribution and you want to upload results for all of them (which you should),
+add them to the same gradle run:
+
+```bash
+  > gradle :vendor-1.0:test :vendor-2.0:test :vendor-42:test  uploadResults -i
+```
+
+Please note, that the build will fail on the first test failure, if the `uploadResults` task is enabled. This is
+intentional to prevent reporting failed tests.
+
+Please also note, that in order to guarantee the correctness of the compatibility page, the Cascading project can not
+list distributions, which did not follow this process.
 
 ## Running a single test
 
@@ -103,25 +123,6 @@ bottom of your `build.gradle` file.
 
 Note that `-i` allows you to see the tests running and is quite useful when calling just the `test` target.
 
-## Sending cascading compatibility results
-
-The build contains a task to send test results back to the cascading project. If
-you want to send the results of your distribution upstream use the
-`uploadResults` tasks like this:
-
-```bash
-  > gradle :vendor-1.0:test uploadResults -i
-```
-
-If you have multiple versions of your distribution and you want to upload
-results for all of them (which you should), add them to the same gradle run:
-
-```bash
-  > gradle :vendor-1.0:test :vendor-2.0:test :vendor-42:test  uploadResults -i
-```
-
-Please note, that the build will fail on test failures, if the `uploadResults`
-task is enabled. This is intentional to prevent reporting failed tests.
 
 ## Creating an IntelliJ module file
 
