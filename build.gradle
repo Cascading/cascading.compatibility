@@ -61,7 +61,7 @@ subprojects {
     outputs.dir "$buildDir/classes/test/"
   }
 
-  task buildHadoopJar(type: Jar) {
+  task buildHadoopJar(type: Jar, dependsOn: unarchiveTest) {
     archiveName = "${rootProject.name}-${cascadingVersion}-remote-test.jar"
     doFirst {
       into( 'lib' ) {
@@ -149,7 +149,7 @@ subprojects {
   }
 
   test {
-    dependsOn << unarchiveTest
+    dependsOn << buildHadoopJar
     dependsOn << cleanTest
 
     forkEvery = 1
