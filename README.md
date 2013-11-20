@@ -42,6 +42,8 @@ To add a sub-project, copy the example project to a new directory named after th
   > cp -R example-1.0 vendor-1.0
 ```
 
+If your distribution is based on Hadoop2, use the `example-hadoop2-1.0` directory.
+
 Update the `distribution.properties` file with all information about your distribution. Please make sure to fill in all
 fields, if something does not apply to your distribution, leave it empty. The meaning of each property is explained
 below:

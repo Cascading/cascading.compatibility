@@ -18,8 +18,14 @@
  * limitations under the License.
  */
 
-include 'apache-0.20.205.0'
-include 'apache-1.0.x'
-include 'apache-1.1.x'
-include 'apache-1.2.x'
-include 'apache-2.2.x'
+dependencies {
+  runtime( group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion ) { transitive = false }
+  runtime( group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion, classifier: 'tests' ) { transitive = false }
+}
+
+test {
+  include '**/*HadoopTest.class'
+
+  systemProperties[ 'hadoop.log.dir' ] = new String( "${buildDir}/test/log" )
+  systemProperties[ 'hadoop.tmp.dir' ] = new String( "${buildDir}/test/tmp" )
+}
