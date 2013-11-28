@@ -57,6 +57,8 @@ allprojects {
 
 subprojects {
 
+  ext.cascadingPlatform = null
+
   task unarchiveTest {
     outputs.dir "$buildDir/classes/test/"
   }
@@ -139,7 +141,8 @@ subprojects {
                 jvmName: System.properties[ "java.vm.vendor" ],
                 testDate: "${rootProject.testDate}",
 
-                cascadingVersion: actualCascadingVersion
+                cascadingVersion: actualCascadingVersion,
+                cascadingPlatform: cascadingPlatform
         ]
 
         def bldr = new JsonBuilder( result )
@@ -183,6 +186,25 @@ subprojects {
     destinationDir = buildDir
     archiveName = "${distName}-${distVersion}-test-results.tgz"
   }
+
+  afterEvaluate {
+    def cascadingArtifacts = project.configurations.testRuntime.resolvedConfiguration.resolvedArtifacts.findAll { artifact ->
+        artifact.name.contains( "cascading-" ) }.asList()
+
+    for ( ccArtifact in cascadingArtifacts ) {
+      FileTree zip = zipTree( ccArtifact.file )
+      def propertiesFiles = zip.findAll{ f -> f.name.endsWith( "platform.properties" ) }
+      if ( ! propertiesFiles.isEmpty() ) {
+        def testPlatformProperties = new Properties()
+        file(propertiesFiles[0]).withReader{ reader -> testPlatformProperties.load( reader ) }
+        def name = testPlatformProperties[ "platform.name" ]
+        if ( name != null ) {
+            cascadingPlatform = name
+            break
+        }
+      }
+    }
+  }
 }
 
 ext.actualCascadingVersion = null
@@ -205,6 +227,7 @@ project.afterEvaluate {
   project.ext.actualCascadingVersion = version
   def versionParts = version.toString().split( "\\." ).toList()
   project.ext.actualCascadingRelease = versionParts[ 0 ] + "." + versionParts[ 1 ]
+
 }
 
 test.enabled = false; // disable root project tests

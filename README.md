@@ -2,7 +2,7 @@
 
 This project will test the binary compatibility of Cascading with differing releases of an underlying platform.
 
-Cascading 2.2 is currently built and published against Apache Hadoop 1.1.x. So is fully tested with that Apache release.
+Cascading 2.5 is currently built and published against Apache Hadoop 1.2.x. So is fully tested with that Apache release.
 
 This suite allows other distributions to be verified as being compatible with the current Cascading release as available
 through Maven and through other tools apart of the [Cascading ecosystem](http://www.cascading.org/extensions/).
@@ -11,7 +11,7 @@ To see the current results, visit the [Cascading Compatibility](http://cascading
 
 See the FAQ, included in this project, for more information.
 
-## Detail
+## Details
 
 Cascading is built against a target set of dependencies and made available through the [Conjars.org](http://conjars.org/)
 Maven repository.
@@ -94,6 +94,8 @@ When updated, to run the tests, call:
 If your distribution is not deployed to a maven repository, please see the FAQ on how to run the tests without one.
 
 If the tests have to run on a remote cluster, change the test settings at the bottom of your `build.gradle` file.
+
+If you distribution supports both hadoop1 and hadoop2, you have to add 2 sub-projects to the test setup; one for each set of hadoop APIs.
 
 ## Sending cascading compatibility results
 
