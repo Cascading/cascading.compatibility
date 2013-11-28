@@ -54,7 +54,7 @@ task gatherTestResultTarballs() {
         copy {
           from tarball
           into buildDir
-          rename '(.+)', actualCascadingRelease + '-$1'
+          rename '(.+)', actualCascadingRelease + "-" + cascadingPlatform + '-$1'
         }
       }
     }
@@ -76,27 +76,34 @@ task gatherTestResults() << {
           json = new JsonSlurper().parse( reader )
         }
 
-        def distributionName = json[ 'distributionName' ]
-        def distributionVersion = json[ 'distributionVersion' ]
+        def distributionName = json[ 'distributionName' ].toString()
+        def distributionVersion = json[ 'distributionVersion' ].toString()
+        def cascadingPlatform = json[ 'cascadingPlatform' ].toString()
 
-        if( distributions.get( distributionName ) != null )
-        {
-          distributions[ distributionName ][ distributionVersion ] = json
+        def version = [ "${distributionVersion}": json ]
+        if (distributions.get( distributionName ) == null ){
+            def platform = [ "${cascadingPlatform}" : version ]
+            distributions[ distributionName ] = platform
         }
         else
         {
-          distributions[ distributionName ] = ["${distributionVersion}": json]
+            def platforms = distributions[ distributionName ]
+            if (platforms.get( "${cascadingPlatform}" ) == null)
+                platforms[ cascadingPlatform ] = version
+            else
+            {
+                def existingVersions = platforms.get( "${cascadingPlatform}" )
+                existingVersions.put( distributionVersion, json )
+            }
         }
-
       }
     }
   }
-
   file( "${buildDir}" ).mkdirs()
   distributions.each { name, results ->
     def map = [:]
     map[ "cascadingVersion" ] = actualCascadingVersion
-    map[ "result" ] = results
+    map[ "platforms" ] = results
     def bldr = new JsonBuilder( map )
     file( "${buildDir}/${actualCascadingRelease}-${name}.json" ).write( bldr.toString() )
   }
