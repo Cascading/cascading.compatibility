@@ -54,7 +54,7 @@ task gatherTestResultTarballs() {
         copy {
           from tarball
           into buildDir
-          rename '(.+)', actualCascadingRelease + "-" + cascadingPlatform + '-$1'
+          rename '(.+)', actualCascadingRelease + "-" + subproject.cascadingPlatform + '-$1'
         }
       }
     }
