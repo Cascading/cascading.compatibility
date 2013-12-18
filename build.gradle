@@ -65,10 +65,11 @@ subprojects {
 
   task buildHadoopJar(type: Jar, dependsOn: unarchiveTest) {
     archiveName = "${rootProject.name}-${cascadingVersion}-remote-test.jar"
+    from sourceSets.test.output
     doFirst {
       into( 'lib' ) {
-        from configurations.runtime
         from configurations.testCompile
+        from configurations.runtime
       }
     }
   }
@@ -165,6 +166,12 @@ subprojects {
     systemProperties[ 'test.cluster.enabled' ] = 'true'
     systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
     systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
+  }
+
+  task testInfo()<< {
+    sourceSets.test.runtimeClasspath.each{ entry ->
+       println entry
+    }
   }
 
   task tarTestResults( type: Tar, dependsOn: [createResultFile, test] ) {

@@ -28,15 +28,15 @@ repositories {
 }
 
 dependencies {
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
     exclude group: 'oro'
   }
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
     exclude group: 'ant'
     exclude group: 'junit'
     exclude group: 'oro'
   }
 
   // missing deps - pinned to versions used in the distribution
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.4.3'
+  testRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.4.3'
 }

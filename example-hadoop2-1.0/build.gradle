@@ -31,20 +31,20 @@ repositories {
 }
 
 dependencies {
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client-core', version: hadoop2Version )
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoop2Version )
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client-core', version: hadoop2Version )
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoop2Version )
 
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoop2Version )
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoop2Version )
 
   // missing deps
-  runtime group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.2'
+  testRuntime group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
+  testRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.2'
 }
 
 // If your tests have to run on remote cluster, comment this in and edit
 // the jobtracker and hdfs master configs accordingly.
 //test {
-//    systemProperties[ 'mapred.jar' ] = buildHadoopJar.archivePath
-//    systemProperties[ 'fs.default.name' ] = new String( 'hdfs://master.local:9000' )
-//    systemProperties[ 'mapred.job.tracker' ] = new String( 'master.local:9001' )
+//  systemProperties[ 'mapred.jar' ] = buildHadoopJar.archivePath
+//  systemProperties[ 'fs.default.name' ] = new String( 'hdfs://master.local:9000' )
+//  systemProperties[ 'mapred.job.tracker' ] = new String( 'master.local:9001' )
 //}
