@@ -28,23 +28,23 @@ repositories {
 }
 
 dependencies {
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
     exclude group: 'oro'
   }
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
     exclude group: 'ant'
     exclude group: 'junit'
     exclude group: 'oro'
   }
 
   // missing deps - pinned to versions used in the distribution
-  runtime group: 'commons-io', name: 'commons-io', version: '2.0.1'
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.4.3'
-  runtime group: 'javax.ws.rs', name: 'jsr311-api', version: '1.1.1'
-  runtime group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.0.1'
-  runtime group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.0.1'
+  testRuntime group: 'commons-io', name: 'commons-io', version: '2.0.1'
+  testRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.4.3'
+  testRuntime group: 'javax.ws.rs', name: 'jsr311-api', version: '1.1.1'
+  testRuntime group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.0.1'
+  testRuntime group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.0.1'
 
   // use 1.2.16 to overcome bad dependencies - dist ships with 1.2.15
-  runtime group: 'log4j', name: 'log4j', version: '1.2.16'
+  testRuntime group: 'log4j', name: 'log4j', version: '1.2.16'
 }
 

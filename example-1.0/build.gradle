@@ -29,28 +29,27 @@ repositories {
   mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
   // Comment this in, if you want to test against local snapshot builds
   // mavenLocal()
-  
 }
 
 dependencies {
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-core', version: hadoopVersion ) {
     exclude group: 'oro'
   }
-  runtime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
+  testRuntime( group: 'org.apache.hadoop', name: 'hadoop-test', version: hadoopVersion ) {
     exclude group: 'ant'
     exclude group: 'junit'
     exclude group: 'oro'
   }
 
   // missing deps
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
+  testRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
 }
 
 // If your tests have to run on remote cluster, comment this in and edit
 // the jobtracker and hdfs master configs accordingly.
 
 //test {
-//    systemProperties[ 'mapred.jar' ] = buildHadoopJar.archivePath
-//    systemProperties[ 'fs.default.name' ] = new String( 'hdfs://master.local:9000' )
-//    systemProperties[ 'mapred.job.tracker' ] = new String( 'master.local:9001' )
+//  systemProperties[ 'mapred.jar' ] = buildHadoopJar.archivePath
+//  systemProperties[ 'fs.default.name' ] = new String( 'hdfs://master.local:9000' )
+//  systemProperties[ 'mapred.job.tracker' ] = new String( 'master.local:9001' )
 //}

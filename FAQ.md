@@ -56,8 +56,8 @@ def hadoopVersion = distProps[ "distribution.version" ]
 apply from: "${rootDir}/settings/hadoop-settings.gradle"
 
 dependencies {
-      runtime fileTree(dir: "/home/hadoop", include: "*.jar")
-      runtime fileTree(dir: "/home/hadoop/lib", include: "*.jar").exclude("*junit*")
+      testRuntime fileTree(dir: "/home/hadoop", include: "*.jar")
+      testRuntime fileTree(dir: "/home/hadoop/lib", include: "*.jar").exclude("*junit*")
 }
 ```
 It is important to exclude the `junit` jar file, that ships with hadoop,
