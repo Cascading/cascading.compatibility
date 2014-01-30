@@ -245,3 +245,10 @@ test.enabled = false; // disable root project tests
 gatherTestResults.dependsOn( subprojects.createResultFile )
 
 gatherTestResultTarballs.dependsOn( subprojects.tarTestResults )
+
+if( project.properties[ 'teamcity' ] ) // make them system properties
+      System.properties.putAll( project.properties[ 'teamcity' ] )
+
+if ( System.properties[ "cascading.management.document.service.hosts" ] ) {
+  apply from: "etc/driven.gradle"
+}
