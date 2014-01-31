@@ -18,14 +18,23 @@
  * limitations under the License.
  */
 
-ext.drivenVersion = "1.0-eap-+"
+allprojects {
+  ext.drivenVersion = "1.0-eap-+"
 
-allprojects{
+  if ( System.properties[ 'private.repo' ] ){
+    ext.drivenVersion = "1.0-wip-+"
+
+    repositories {
+      mavenRepo name: 'private', url: System.properties[ 'private.repo' ]
+    }
+  }
+
   dependencies {
-    runtime( group: "driven", name: "driven-plugin", version: drivenVersion  )
+    runtime( group: "driven", name: "driven-plugin", version: drivenVersion, classifier: "io" )
   }
 
   test {
-    systemProperty "cascading.management.document.service.hosts", System.getProperty(  "cascading.management.document.service.hosts")
+    systemProperty "cascading.management.document.service.hosts", System.getProperty( "cascading.management.document.service.hosts" )
+    systemProperty "cascading.management.document.service.apikey", System.getProperty( "cascading.management.document.service.apikey" )
   }
 }
