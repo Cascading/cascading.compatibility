@@ -24,7 +24,7 @@ def hadoopVersion = distProps[ "distribution.version" ]
 apply from: "${rootDir}/settings/hadoop-settings.gradle"
 
 repositories {
-  mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+  maven{ url 'https://repository.apache.org/content/repositories/releases/' }
 }
 
 dependencies {

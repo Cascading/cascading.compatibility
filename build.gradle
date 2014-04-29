@@ -43,7 +43,7 @@ allprojects {
   repositories {
     //mavenLocal()
     mavenCentral()
-    mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
+    maven{ url 'http://conjars.org/repo/' }
   }
 
   // core dependencies - see {platform}-settings.gradle for platform specific dependencies
