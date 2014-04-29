@@ -81,15 +81,14 @@ task gatherTestResults() << {
         def cascadingPlatform = json[ 'cascadingPlatform' ].toString()
         def version = [ "${distributionVersion}": json ]
         if (distributions.get( distributionName ) == null ){
-            def platform = [ : ]
-            platform.put(cascadingPlatform, version)
+            def platform = [ "${cascadingPlatform}" : version ]
             distributions[ distributionName ] = platform
         }
         else
         {
             def platforms = distributions.get( distributionName )
             if (platforms.get( cascadingPlatform ) == null)
-                platforms.put( cascadingPlatform, version )
+                platforms[ "${cascadingPlatform}" ] = version
             else
             {
                 def existingVersions = platforms.get( cascadingPlatform )
