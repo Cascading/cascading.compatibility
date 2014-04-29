@@ -19,14 +19,13 @@
  */
 
 
-
 def hadoopVersion = '1.2.1'
 
 // get default hadoop configuration
 apply from: "${rootDir}/settings/hadoop-settings.gradle"
 
 repositories {
-  mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+  maven{ url 'https://repository.apache.org/content/repositories/releases/' }
 }
 
 dependencies {

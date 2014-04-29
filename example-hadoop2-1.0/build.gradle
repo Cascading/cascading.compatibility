@@ -18,14 +18,13 @@
  * limitations under the License.
  */
 
-
-def hadoop2Version = '2.2.0'
+def hadoop2Version = '2.3.0'
 
 // get hadoop configuration
 apply from: "${rootDir}/settings/hadoop2-mr1-settings.gradle"
 
 repositories {
-  mavenRepo name: 'apache', url: 'https://repository.apache.org/content/repositories/releases/'
+  maven{ url 'https://repository.apache.org/content/repositories/releases/' }
   // Comment this in, if you want to test against local snapshot builds
   // mavenLocal()
 }
