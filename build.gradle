@@ -157,7 +157,7 @@ subprojects {
     dependsOn << cleanTest
 
     forkEvery = 1
-    jvmArgs '-Xmx756m'
+    jvmArgs '-Xmx756m', '-XX:MaxPermSize=128M'
 
     ignoreFailures = !rootProject.tasks[ "uploadResults" ].enabled
 
