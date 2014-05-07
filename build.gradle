@@ -112,7 +112,7 @@ subprojects {
     }
   }
 
-  task createResultFile( dependsOn: test ) {
+  task createResultFile {
     description = "creates a result.json file for the test run"
 
     if( file( "distribution.properties" ).exists() )
@@ -166,6 +166,12 @@ subprojects {
     systemProperties[ 'test.cluster.enabled' ] = 'true'
     systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
     systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
+
+    doLast {
+        createResultFile.execute()
+        tarTestResults.execute()
+    }
+
   }
 
   task testInfo()<< {
@@ -174,7 +180,7 @@ subprojects {
     }
   }
 
-  task tarTestResults( type: Tar, dependsOn: [createResultFile, test] ) {
+  task tarTestResults( type: Tar) {
     // can't read the result.json file, since it does not exist yet in the
     // config phase of the task.
     def distProps = null
@@ -238,13 +244,6 @@ project.afterEvaluate {
 }
 
 test.enabled = false; // disable root project tests
-
-// this goes at the very bottom an wires the result creation togehter. gradle
-// reads files top to bottom  and starts failing, if we put this anywhere
-// else.
-gatherTestResults.dependsOn( subprojects.createResultFile )
-
-gatherTestResultTarballs.dependsOn( subprojects.tarTestResults )
 
 if( project.properties[ 'teamcity' ] ) // make them system properties
   System.properties.putAll( project.properties[ 'teamcity' ] )
