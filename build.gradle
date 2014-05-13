@@ -128,6 +128,7 @@ subprojects {
                 distributionReleaseURL: distProps[ "distribution.releaseurl" ],
                 distributionMavenRepo: distProps[ "distribution.mavenrepo" ],
                 includesSDK: distProps[ "distribution.includessdk" ],
+                distributionSupportURL: distProps[ "distribution.support" ],
 
                 // TODO make these dynamic
                 isBinaryCompatible: "yes",
