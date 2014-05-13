@@ -72,6 +72,9 @@ below:
 
     # does the distribution ship with the cascading SDK?
     distribution.includessdk=yes
+
+    # URL to the (commercial) support offering of the distribution
+    distribution.supporturl
 ```
 
 
