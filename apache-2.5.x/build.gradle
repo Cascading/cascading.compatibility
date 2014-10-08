@@ -19,7 +19,7 @@
  */
 
 
-def hadoop2Version = '2.5.0'
+def hadoop2Version = '2.5.1'
 
 // get hadoop configuration
 apply from: "${rootDir}/settings/hadoop2-mr1-settings.gradle"
@@ -35,6 +35,6 @@ dependencies {
   runtime( group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoop2Version )
 
   // missing deps
-  runtime group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
-  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.2'
+  runtime group: 'org.slf4j', name: 'slf4j-api', version: '1.7.5'
+  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
 }
