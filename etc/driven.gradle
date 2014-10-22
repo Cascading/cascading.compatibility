@@ -19,10 +19,10 @@
  */
 
 allprojects {
-  ext.drivenVersion = "1.0.3-eap-+"
+  ext.drivenVersion = "1.1-eap-+"
 
   if ( System.properties[ 'private.repo' ] ){
-    ext.drivenVersion = "1.1-wip-+"
+    ext.drivenVersion = "1.1.1-wip-+"
 
     repositories {
       mavenRepo name: 'private', url: System.properties[ 'private.repo' ]
