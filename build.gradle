@@ -168,6 +168,12 @@ subprojects {
     systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
     systemProperties[ 'test.output.root' ] = new String( "${buildDir}/test/output/" )
 
+    for ( propertyName in System.getProperties().stringPropertyNames() ) {
+      if ( propertyName.startsWith( "platform" ) ) {
+        systemProperties[ propertyName ] = System.getProperty( propertyName )
+      }
+    }
+
     doLast {
         createResultFile.execute()
         tarTestResults.execute()
