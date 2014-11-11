@@ -2,7 +2,8 @@
 
 This project will test the binary compatibility of Cascading with differing releases of an underlying platform.
 
-Cascading 2.5 is currently built and published against Apache Hadoop 1.2.x. So is fully tested with that Apache release.
+Cascading 2.7 is currently built and published against Apache Hadoop 1.2.x and Apache Hadoop 2.4.1. So is fully tested
+with those Apache releases.
 
 This suite allows other distributions to be verified as being compatible with the current Cascading release as available
 through Maven and through other tools apart of the [Cascading ecosystem](http://www.cascading.org/extensions/).
