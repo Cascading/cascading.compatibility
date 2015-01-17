@@ -30,7 +30,7 @@ allprojects {
   }
 
   dependencies {
-    runtime( group: "driven", name: "driven-plugin", version: drivenVersion, classifier: "io" )
+    runtime( group: "driven", name: "driven-plugin", version: drivenVersion )
   }
 
   test {
