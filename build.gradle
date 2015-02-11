@@ -154,6 +154,10 @@ subprojects {
   }
 
   test {
+    beforeTest { descriptor ->
+      systemProperties[ 'platform.cascading.app.name' ] = descriptor.getName()
+    }
+      
     dependsOn << buildHadoopJar
     dependsOn << cleanTest
 
