@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '2.7.0-wip-+'
+ext.cascadingVersion = '3.0.0-wip-+'
 
 apply from: 'etc/publish.gradle'
 
