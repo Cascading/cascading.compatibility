@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2012 Concurrent, Inc. All Rights Reserved.
+ * Copyright (c) 2007-2015 Concurrent, Inc. All Rights Reserved.
  *
  * Project and contact information: http://www.cascading.org/
  *
@@ -18,18 +18,14 @@
  * limitations under the License.
  */
 
-// hadoop2-tez
-include 'apache-2.6.x-tez-0.6.x'
+dependencies {
+  runtime( group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion ) { transitive = false }
+  runtime( group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, classifier: 'tests' ) { transitive = false }
+}
 
-// hadoop
-include 'apache-0.20.205.0'
-include 'apache-1.0.x'
-include 'apache-1.1.x'
-include 'apache-1.2.x'
+test {
+  include '**/*HadoopTest.class'
 
-// hadoop2-mr1
-include 'apache-2.2.x'
-include 'apache-2.3.x'
-include 'apache-2.4.x'
-include 'apache-2.5.x'
-include 'apache-2.6.x'
+  systemProperties[ 'hadoop.log.dir' ] = new String( "${buildDir}/test/log" )
+  systemProperties[ 'hadoop.tmp.dir' ] = new String( "${buildDir}/test/tmp" )
+}
