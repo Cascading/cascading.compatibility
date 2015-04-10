@@ -74,27 +74,27 @@ subprojects {
     }
   }
 
-  unarchiveTest << {
+  unarchiveTest {
+
     mkdir "$buildDir/classes/test/"
+    doLast {
+      // we only want the jars with test classifier
+      def jars = configurations.runtime.resolvedConfiguration.firstLevelModuleDependencies.findAll { dep ->
+        dep.name.contains( 'cascading' )
+      }.collect { dep ->
+        dep.moduleArtifacts.collect { it.file }
+      }.flatten().findAll { file ->
+        file.toString().endsWith( '-tests.jar' )
+      }
 
-    // we only want the jars with test classifier
-    def jars = configurations.runtime.resolvedConfiguration.firstLevelModuleDependencies.findAll { dep ->
-      dep.name.contains( 'cascading' )
-    }.collect { dep ->
-      dep.moduleArtifacts.collect { it.file }
-    }.flatten().findAll { file ->
-      file.toString().endsWith( '-tests.jar' )
-    }
+      jars.each { jarFile ->
 
-    jars.each { jarFile ->
+        def jar = zipTree( jarFile )
 
-      def jar = zipTree( jarFile )
-
-      inputs.file jar
-
-      copy {
-        from jar
-        into "$buildDir/classes/test/"
+        copy {
+          from jar
+          into "$buildDir/classes/test/"
+        }
       }
     }
   }
