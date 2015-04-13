@@ -19,7 +19,7 @@
  */
 
 // hadoop2-tez
-include 'apache-2.5.x-tez-0.6.x'
+//include 'apache-2.5.x-tez-0.6.x'
 include 'apache-2.6.x-tez-0.6.x'
 
 // hadoop
