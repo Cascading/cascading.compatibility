@@ -19,10 +19,9 @@
  */
 
 
-def hadoop2Version = '2.5.2'
-def tezVersion = '0.6.0'
+def hadoop2Version = '2.4.1'
+def tezVersion = '0.7.0'
 
-// get hadoop configuration
 apply from: "${rootDir}/settings/hadoop2-tez-settings.gradle"
 
 repositories {
@@ -41,7 +40,7 @@ dependencies {
   runtime( group: 'org.apache.tez', name: 'tez-tests', version: tezVersion, classifier: 'tests' )
   runtime( group: 'org.apache.tez', name: 'tez-api', version: tezVersion )
   runtime( group: 'org.apache.tez', name: 'tez-dag', version: tezVersion )
-  runtime( group: 'org.apache.tez', name: 'tez-yarn-timeline-history-with-acls', version: tezVersion )
+  runtime( group: 'org.apache.tez', name: 'tez-yarn-timeline-history', version: tezVersion )
   runtime( group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoop2Version )
 }
 
@@ -56,4 +55,7 @@ configurations.all {
   }
 }
 
-
+test {
+  systemProperties[ 'platform.tez.am.tez-ui.webservice.enable' ] = 'false'
+  systemProperties[ 'platform.tez.allow.disabled.timeline-domains' ] = 'true'
+}
