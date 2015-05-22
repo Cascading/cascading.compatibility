@@ -25,7 +25,7 @@ allprojects {
     ext.drivenVersion = "1.2-wip-+"
 
     repositories {
-      mavenRepo name: 'private', url: System.properties[ 'private.repo' ]
+      maven{ url System.properties[ 'private.repo' ] }
     }
   }
 
