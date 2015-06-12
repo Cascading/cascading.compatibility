@@ -22,7 +22,7 @@ allprojects {
   ext.drivenVersion = "1.2-eap-+"
 
   if ( System.properties[ 'private.repo' ] ){
-    ext.drivenVersion = "1.2-wip-+"
+    ext.drivenVersion = "1.3-wip-+"
 
     repositories {
       maven{ url System.properties[ 'private.repo' ] }
