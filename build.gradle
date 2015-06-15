@@ -33,8 +33,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 // use human readable date format
 ext.testDate = new SimpleDateFormat( "MMMM dd, yyyy" ).format( new Date() )
 
-ext.resultFileName = "result.json"
-
 allprojects {
 
   apply plugin: 'java'
@@ -115,7 +113,7 @@ subprojects {
     if( file( "distribution.properties" ).exists() )
     {
       doLast {
-        file( buildDir ).mkdirs()
+        file( "${buildDir}/compat/${cascadingPlatform}" ).mkdirs()
         def result = [
                 distributionName: distProps[ "distribution.name" ],
                 distributionVersion: distProps[ "distribution.version" ],
@@ -143,9 +141,17 @@ subprojects {
                 cascadingVersion: actualCascadingVersion,
                 cascadingPlatform: cascadingPlatform
         ]
-
+        if( distProps.get( "distribution.yarnversion" ) != null )
+          result.put( "yarnVersion", distProps.get( "distribution.yarnversion" )  )    
+        if( distProps.get( "distribution.platformurl" ) != null )
+          result.put( "platformUrl", distProps.get( "distribution.platformurl" )  )    
+        if( distProps.get( "distribution.platformversion" ) != null )
+          result.put( "platformVersion", distProps.get( "distribution.platformversion" )  )    
+        if( distProps.get( "distribution.platformdisplayname" ) != null )
+          result.put( "platformDisplayName", distProps.get( "distribution.platformdisplayname" )  )    
+          
         def bldr = new JsonBuilder( result )
-        file( "${buildDir}/${resultFileName}" ).write( bldr.toString() )
+        file( "${buildDir}/compat/${cascadingPlatform}/${result.distributionName}-${result.distributionVersion}.json" ).write( bldr.toString() )
       }
     }
   }
@@ -226,6 +232,11 @@ subprojects {
         }
       }
     }
+
+    // this allows to run all projects for a certain platform
+    def testPlatform = System.getProperty( "platform.name" )
+    if( testPlatform != null && testPlatform != cascadingPlatform )
+      tasks[ "test" ].enabled = false
   }
 }
 
@@ -249,7 +260,6 @@ project.afterEvaluate {
   project.ext.actualCascadingVersion = version
   def versionParts = version.toString().split( "\\." ).toList()
   project.ext.actualCascadingRelease = versionParts[ 0 ] + "." + versionParts[ 1 ]
-
 }
 
 test.enabled = false; // disable root project tests

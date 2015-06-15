@@ -43,7 +43,8 @@ To add a sub-project, copy the example project to a new directory named after th
   > cp -R example-1.0 vendor-1.0
 ```
 
-If your distribution is based on Hadoop2, use the `example-hadoop2-1.0` directory.
+If your distribution is based on Hadoop2, use the `example-hadoop2-1.0` directory. In case you are testing a distro,
+which supports Apache Tez, you can use the `example-tez-1.0` directory.
 
 Update the `distribution.properties` file with all information about your distribution. Please make sure to fill in all
 fields, if something does not apply to your distribution, leave it empty. The meaning of each property is explained
@@ -76,6 +77,15 @@ below:
 
     # URL to the (commercial) support offering of the distribution
     distribution.supporturl
+
+    # The version of yarn/hdfs supported by the distribution. Leave out for distros w/o YARN or HDFS
+    distribution.yarnversion=2.6
+    # Name of the platform to be displayed on the compat page
+    distribution.platformdisplayname=Apache Tez
+    # version of the platform
+    distribution.platformversion=0.6
+    # url of the platform
+    distribution.platformurl=http://tez.apache.org
 ```
 
 

@@ -27,10 +27,11 @@ buildscript {
     maven{ url 'http://conjars.org/repo/' }
   }
   dependencies {
-    classpath "com.amazonaws:aws-java-sdk:1.4.5"
+    classpath "com.amazonaws:aws-java-sdk-s3:1.9.40"
   }
 }
 
+import java.nio.file.Paths
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -61,80 +62,27 @@ task gatherTestResultTarballs() {
   }
 }
 
-task gatherTestResults() << {
-  description = "collects all test results and prepares them for publishing"
-
-  def distributions = [:]
-  for( sub in subprojects )
-  {
-    for( f in sub.buildDir.listFiles() )
-    {
-      if( f.name.endsWith( resultFileName ) )
-      {
-        def json = null
-        file( f ).withReader { reader ->
-          json = new JsonSlurper().parse( reader )
-        }
-
-        def distributionName = json[ 'distributionName' ].toString()
-        def distributionVersion = json[ 'distributionVersion' ].toString()
-        def cascadingPlatform = json[ 'cascadingPlatform' ].toString()
-        def version = [ : ]
-        version.put( distributionVersion, json )
-        if (distributions.get( distributionName ) == null ){
-            def platform = [ : ]
-            platform.put( cascadingPlatform,  version )
-            distributions[ distributionName ] = platform
-        }
-        else
-        {
-            def platforms = distributions.get( distributionName )
-            if (platforms.get( cascadingPlatform ) == null)
-                platforms.put( cascadingPlatform, version )
-            else
-            {
-                def existingVersions = platforms.get( cascadingPlatform )
-                existingVersions.put( distributionVersion, json )
-            }
-        }
-      }
-    }
-  }
-  file( "${buildDir}" ).mkdirs()
-  distributions.each { name, results ->
-    def map = [:]
-    map[ "cascadingVersion" ] = actualCascadingVersion
-    map[ "platforms" ] = results
-    def bldr = new JsonBuilder( map )
-    file( "${buildDir}/${actualCascadingRelease}-${name}.json" ).write( bldr.toString() )
-  }
-
-}
-
-task uploadResults( dependsOn: [gatherTestResults, gatherTestResultTarballs] ) {
+task uploadResults( dependsOn: [ gatherTestResultTarballs ] ) {
   description = "publishes compatibility test results"
 
-  def prefix = "partner/"
   doLast {
-    def tree = fileTree( buildDir ) {
-      include '**/*.json'
-      include '**/*.tgz'
-    }
-    def s3 = new AmazonS3Client()
-    def acl = new AccessControlList()
-    acl.grantPermission( GroupGrantee.AuthenticatedUsers,
-            Permission.Read )
-    acl.grantPermission( GroupGrantee.AuthenticatedUsers,
-            Permission.Write )
+    def prefix = "incoming/${project.actualCascadingRelease}"
+    for ( sub in subprojects ) {
+      println sub
+      def tree = fileTree( "${sub.buildDir}/compat" )
+      def acl = new AccessControlList()
+      acl.grantPermission( GroupGrantee.AuthenticatedUsers, Permission.Read )
+      acl.grantPermission( GroupGrantee.AuthenticatedUsers, Permission.Write )
 
-    for( resultFile in tree )
-    {
-      key = "${prefix}${resultFile.name}"
-      logger.info( "uploading ${resultFile.name} to s3://${s3bucketName}/${key}" )
-      def s3PutReq = new PutObjectRequest( s3bucketName,
-              key,
-              resultFile ).withAccessControlList( acl )
-      s3.putObject( s3PutReq )
+      def s3 = new AmazonS3Client()
+      for( resultFile in tree ) {
+        def path = resultFile.path.toString().replaceAll( sub.buildDir.toString(), "" )
+        path =  path.replaceAll( "compat/", "" )
+        def key = "${prefix}${path}"
+        logger.info( "uploading ${path} to s3://${s3bucketName}/${key}" )
+        def s3PutReq = new PutObjectRequest( s3bucketName, key, resultFile ).withAccessControlList( acl )
+        s3.putObject( s3PutReq )
+      }
     }
   }
 }
