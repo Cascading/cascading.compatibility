@@ -19,7 +19,7 @@
  */
 
 
-def hadoop2Version = '2.7.0'
+def hadoop2Version = '2.7.1'
 
 // get hadoop configuration
 apply from: "${rootDir}/settings/hadoop2-mr1-settings.gradle"
