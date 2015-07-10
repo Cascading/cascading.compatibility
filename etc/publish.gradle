@@ -54,7 +54,7 @@ task gatherTestResultTarballs() {
       {
         copy {
           from tarball
-          into buildDir
+          into "${subproject.buildDir}/compat/${subproject.cascadingPlatform}"
           rename '(.+)', actualCascadingRelease + "-" + subproject.cascadingPlatform + '-$1'
         }
       }
