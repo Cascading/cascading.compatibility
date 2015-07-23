@@ -156,13 +156,16 @@ subprojects {
     }
   }
 
+  task killChildVms( type: Exec ) {
+    commandLine "bash", "-c", 'pids="`jps | grep DAGApp`"; if [ -n "$pids" ] ; then kill -9 $pids ; fi'
+  }
+
   test {
     beforeTest { descriptor ->
       systemProperties[ 'platform.cascading.app.name' ] = descriptor.getName()
     }
     afterTest {
-      def proc = "bash -c 'kill -9 \$(jps | grep DAGAppMaster | awk \\'{print \$1}\\')' ".execute()
-      proc.waitFor()
+      killChildVms.execute()
     }
       
     dependsOn << buildHadoopJar
