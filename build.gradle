@@ -160,6 +160,10 @@ subprojects {
     beforeTest { descriptor ->
       systemProperties[ 'platform.cascading.app.name' ] = descriptor.getName()
     }
+    afterTest {
+      def proc = "bash -c 'kill -9 \$(jps | grep DAGAppMaster | awk \\'{print \$1}\\')' ".execute()
+      proc.waitFor()
+    }
       
     dependsOn << buildHadoopJar
     dependsOn << cleanTest
