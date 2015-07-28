@@ -2,7 +2,7 @@
 
 This project will test the binary compatibility of Cascading with differing releases of an underlying platform.
 
-Cascading 2.7 is currently built and published against Apache Hadoop 1.2.x and Apache Hadoop 2.4.1. So is fully tested
+Cascading 3.1 is currently built and published against Apache Hadoop 1.2.x and Apache Hadoop 2.6.0. So is fully tested
 with those Apache releases.
 
 This suite allows other distributions to be verified as being compatible with the current Cascading release as available
@@ -80,10 +80,13 @@ below:
 
     # The version of yarn/hdfs supported by the distribution. Leave out for distros w/o YARN or HDFS
     distribution.yarnversion=2.6
+
     # Name of the platform to be displayed on the compat page
     distribution.platformdisplayname=Apache Tez
+
     # version of the platform
     distribution.platformversion=0.6
+
     # url of the platform
     distribution.platformurl=http://tez.apache.org
 ```
