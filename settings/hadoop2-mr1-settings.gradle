@@ -20,6 +20,7 @@
 
 dependencies {
   runtime( group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion ) { transitive = false }
+  runtime( group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion ) { transitive = false }
   runtime( group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion, classifier: 'tests' ) { transitive = false }
 }
 
