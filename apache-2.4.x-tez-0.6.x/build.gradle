@@ -20,7 +20,7 @@
 
 
 def hadoop2Version = '2.4.1'
-def tezVersion = '0.6.1'
+def tezVersion = '0.6.2'
 
 apply from: "${rootDir}/settings/hadoop2-tez-settings.gradle"
 
