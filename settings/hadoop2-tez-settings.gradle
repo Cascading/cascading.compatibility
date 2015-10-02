@@ -20,6 +20,7 @@
 
 dependencies {
   runtime( group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion ) { transitive = false }
+  runtime( group: 'cascading', name: 'cascading-hadoop2-tez-stats', version: cascadingVersion ) { transitive = false }
   runtime( group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion ) { transitive = false }
   runtime( group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, classifier: 'tests' ) { transitive = false }
 }
