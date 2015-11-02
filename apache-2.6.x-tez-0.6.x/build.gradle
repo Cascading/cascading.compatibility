@@ -19,7 +19,7 @@
  */
 
 
-def hadoop2Version = '2.6.0'
+def hadoop2Version = '2.6.2'
 def tezVersion = '0.6.2'
 
 // get hadoop configuration
