@@ -10,5 +10,7 @@ javadoc
 *.tmproj
 .idea
 *.iml
+*.ipr
+*.iws
 .gradle
 **/target
