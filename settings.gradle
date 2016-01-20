@@ -22,6 +22,7 @@
 include 'apache-2.4.x-tez-0.6.x'
 include 'apache-2.5.x-tez-0.6.x'
 include 'apache-2.6.x-tez-0.6.x'
+include 'apache-2.6.x-tez-0.8.x'
 
 
 // hadoop
