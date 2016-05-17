@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-ext.cascadingVersion = '3.1.0-wip-+'
+ext.cascadingVersion = '3.1.0'
 
 apply from: 'etc/publish.gradle'
 
@@ -142,14 +142,14 @@ subprojects {
                 cascadingPlatform: cascadingPlatform
         ]
         if( distProps.get( "distribution.yarnversion" ) != null )
-          result.put( "yarnVersion", distProps.get( "distribution.yarnversion" )  )    
+          result.put( "yarnVersion", distProps.get( "distribution.yarnversion" )  )
         if( distProps.get( "distribution.platformurl" ) != null )
-          result.put( "platformUrl", distProps.get( "distribution.platformurl" )  )    
+          result.put( "platformUrl", distProps.get( "distribution.platformurl" )  )
         if( distProps.get( "distribution.platformversion" ) != null )
-          result.put( "platformVersion", distProps.get( "distribution.platformversion" )  )    
+          result.put( "platformVersion", distProps.get( "distribution.platformversion" )  )
         if( distProps.get( "distribution.platformdisplayname" ) != null )
-          result.put( "platformDisplayName", distProps.get( "distribution.platformdisplayname" )  )    
-          
+          result.put( "platformDisplayName", distProps.get( "distribution.platformdisplayname" )  )
+
         def bldr = new JsonBuilder( result )
         file( "${buildDir}/compat/${cascadingPlatform}/${result.distributionName}-${result.distributionVersion}.json" ).write( bldr.toString() )
       }
